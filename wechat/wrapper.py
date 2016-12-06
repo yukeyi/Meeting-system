@@ -6,12 +6,12 @@ import json
 import logging
 import urllib.request
 import xml.etree.ElementTree as ET
-from WeChatTicket.settings import WECHAT_TOKEN, WECHAT_APPID, WECHAT_SECRET
+from meeting.settings import WECHAT_TOKEN, WECHAT_APPID, WECHAT_SECRET
 
 from django.http import Http404, HttpResponse
 from django.template.loader import get_template
 
-from WeChatTicket import settings
+from meeting import settings
 from codex.baseview import BaseView
 from wechat.models import User
 

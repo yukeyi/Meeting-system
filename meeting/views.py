@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 from codex.baseview import BaseView
-from WeChatTicket import settings
+from meeting import settings
 
 from django.http import HttpResponse, Http404
 

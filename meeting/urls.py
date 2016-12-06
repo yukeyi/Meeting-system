@@ -17,7 +17,7 @@ from django.conf.urls import url, include
 from django.contrib import admin
 
 from wechat.views import CustomWeChatView
-from WeChatTicket.views import StaticFileView
+from meeting.views import StaticFileView
 
 
 urlpatterns = [

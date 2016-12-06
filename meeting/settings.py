@@ -67,7 +67,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'WeChatTicket.urls'
+ROOT_URLCONF = 'meeting.urls'
 
 TEMPLATES = [
     {
@@ -97,7 +97,7 @@ if not DEBUG:
     ]
 
 
-WSGI_APPLICATION = 'WeChatTicket.wsgi.application'
+WSGI_APPLICATION = 'meeting.wsgi.application'
 
 
 # Database
