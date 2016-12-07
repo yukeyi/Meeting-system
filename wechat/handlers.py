@@ -51,6 +51,7 @@ class BindAccountHandler(WeChatHandler):
         user_info = json.loads(user_content)
         print(user_info)
         temp = UserLogin.objects.filter(open_id=openid)
+
         if temp:
             return self.reply_text('您已经绑定过了')
         else:
@@ -76,10 +77,164 @@ class BindAccountHandler(WeChatHandler):
             return self.reply_text('绑定成功！'+ '\n' +'您的会佳ID是' + str(hj_user_info['data']['id'])+';\n'+'您的密码是' + str(hj_user_info['data']['password']))
 
 
-class BookEmptyHandler(WeChatHandler):
+class AllMeetingsHandler(WeChatHandler):
 
     def check(self):
-        return self.is_event_click(self.view.event_keys['book_empty'])
+        return self.is_event_click(self.view.event_keys['all_meeting'])
 
     def handle(self):
-        return self.reply_text(self.get_message('book_empty'))
+        openid = self.input['FromUserName']
+        temp = UserLogin.objects.filter(open_id=openid)
+        if temp:
+            print(temp[0].watching_page)
+            url = 'http://60.205.137.139/adminweb/REST/API-V2/allConfList?userid='+str(temp[0].user_id)+'&page='+str(temp[0].watching_page)+'&page_size='+str(3)
+            req = urllib.request.Request(url)
+            response = urllib.request.urlopen(req)
+            content = response.read().decode('utf-8')
+            re = json.loads(content)
+            if len(re['data']) == 0:
+                return self.reply_text("目前没有会议")
+           # print(re['data'])
+            if temp[0].watching_page * 3 > re['total_size']:
+                temp[0].watching_page = 1
+                temp[0].save()
+            else:
+                temp[0].watching_page = temp[0].watching_page + 1
+                temp[0].save()
+            ans = []
+            for index in range(0, len(re['data'])):
+                if len(re['data'][index]['name']) > 15:
+                    name = re['data'][index]['name'][:15]+"..."
+                else:
+                    name = re['data'][index]['name']
+                url = 'http://m2.huiplus.com.cn/app/#/confinfo/'+str(re['data'][index]['id'])
+                ans.append({
+                    'Title': name,
+                    'Url': url,
+                    'PicUrl': 'http://60.205.137.139/adminweb/'+ re['data'][index]['image'],
+                })
+            ans.append({'Title' : '再次点击所有会议查看更多'})
+            return self.reply_news(ans)
+        else:
+            return self.reply_text("您还没进行过绑定")
+
+
+class RecentMeetingHandler(WeChatHandler):
+
+    def check(self):
+        return self.is_event_click(self.view.event_keys['recent'])
+
+    def handle(self):
+        openid = self.input['FromUserName']
+        temp = UserLogin.objects.filter(open_id=openid)
+        if temp:
+            url = 'http://60.205.137.139/adminweb/REST/API-V2/upcomingConfList?userid='+str(temp[0].user_id)+'&page='+str(1)+'&page_size='+str(10)
+            req = urllib.request.Request(url)
+            response = urllib.request.urlopen(req)
+            content = response.read().decode('utf-8')
+            re = json.loads(content)
+            if len(re['data']) == 0:
+                return self.reply_text("近期没有会议")
+            ans = []
+            for index in range(0, len(re['data'])):
+                if len(re['data'][index]['name']) > 15:
+                    name = re['data'][index]['name'][:15]+"..."
+                else:
+                    name = re['data'][index]['name']
+                url = 'http://m2.huiplus.com.cn/app/#/confinfo/'+str(re['data'][index]['id'])
+                ans.append({
+                    'Title': name,
+                    'Url': url,
+                    'PicUrl': 'http://60.205.137.139/adminweb/'+ re['data'][index]['image'],
+                })
+            return self.reply_news(ans)
+        else:
+            return self.reply_text("您还没进行过绑定")
+
+class MyMeetingHandler(WeChatHandler):
+
+    def check(self):
+        return self.is_event_click(self.view.event_keys['my_meeting'])
+
+    def handle(self):
+        openid = self.input['FromUserName']
+        temp = UserLogin.objects.filter(open_id=openid)
+        if temp:
+            url = 'http://60.205.137.139/adminweb/REST/API-V2/favoriteConfList?userid='+str(temp[0].user_id)+'&page='+str(1)+'&page_size='+str(3)
+            req = urllib.request.Request(url)
+            response = urllib.request.urlopen(req)
+            content = response.read().decode('utf-8')
+            re = json.loads(content)
+            if len(re['data']) == 0:
+                return self.reply_text("您没有关注或收藏的会议")
+            ans = []
+            for index in range(0, len(re['data'])):
+                if len(re['data'][index]['name']) > 15:
+                    name = re['data'][index]['name'][:15]+"..."
+                else:
+                    name = re['data'][index]['name']
+                url = 'http://m2.huiplus.com.cn/app/#/confinfo/'+str(re['data'][index]['id'])
+                ans.append({
+                    'Title': name,
+                    'Url': url,
+                    'PicUrl': 'http://60.205.137.139/adminweb/'+ re['data'][index]['image'],
+                })
+            return self.reply_news(ans)
+        else:
+            return self.reply_text("您还没进行过绑定")
+
+
+class FakeSearchHandler(WeChatHandler):
+
+    def check(self):
+        return self.is_event_click(self.view.event_keys['search'])
+
+    def handle(self):
+        openid = self.input['FromUserName']
+        temp = UserLogin.objects.filter(open_id=openid)
+        if temp:
+
+            return self.reply_text('请输入关键词查询' + '\n' + '格式为：查询 关键词' + '\n' + '例：查询 教育资源')
+        else:
+            return self.reply_text("您还没进行过绑定")
+
+class SearchHandler(WeChatHandler):
+
+    def check(self):
+        temp = self.input['Content'][:3]
+        if(temp=="查询 "):
+            return True
+        else:
+            return False
+
+    def handle(self):
+        checkContent = self.input['Content'][3:]
+        openid = self.input['FromUserName']
+        temp = UserLogin.objects.filter(open_id=openid)
+        if temp:
+            url = 'http://60.205.137.139/adminweb/REST/API-V2/searchConfList?userid=' + str(
+                temp[0].user_id) + '&content='+ urllib.parse.quote(checkContent) + '&page=' + str(1) + '&page_size=' + str(3)
+            req = urllib.request.Request(url)
+            print(1)
+            response = urllib.request.urlopen(req)
+            print(2)
+            content = response.read().decode('utf-8')
+            re = json.loads(content)
+            if len(re['data']) == 0:
+                return self.reply_text("没有查找到相关会议")
+            ans = []
+            for index in range(0, len(re['data'])):
+                if len(re['data'][index]['name']) > 15:
+                    name = re['data'][index]['name'][:15] + "..."
+                else:
+                    name = re['data'][index]['name']
+                url = 'http://m2.huiplus.com.cn/app/#/confinfo/' + str(re['data'][index]['id'])
+                ans.append({
+                    'Title': name,
+                    'Url': url,
+                    'PicUrl': 'http://60.205.137.139/adminweb/' + re['data'][index]['image'],
+                })
+            return self.reply_news(ans)
+        else:
+            return self.reply_text("您还没进行过绑定")
+

@@ -49,6 +49,7 @@ class UserLogin(models.Model):
     user_id = models.IntegerField()
     open_id = models.CharField(max_length=64, unique=True, db_index=True)
     email = models.CharField(max_length=64, null=True)
+    watching_page = models.IntegerField(default=1)
 
 class ConfBasic(models.Model):
     conf_id = models.IntegerField()                   # 会议id

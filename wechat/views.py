@@ -11,7 +11,7 @@ class CustomWeChatView(WeChatView):
     lib = WeChatLib(WECHAT_TOKEN, WECHAT_APPID, WECHAT_SECRET)
 
     handlers = [
-        BindAccountHandler, BookEmptyHandler,
+        SearchHandler, BindAccountHandler,  AllMeetingsHandler, RecentMeetingHandler, MyMeetingHandler, FakeSearchHandler,
     ]
     error_message_handler = ErrorHandler
     default_handler = DefaultHandler
@@ -20,41 +20,50 @@ class CustomWeChatView(WeChatView):
         'book_what': 'SERVICE_BOOK_WHAT',
         'get_ticket': 'SERVICE_GET_TICKET',
         'account_bind': 'SERVICE_BIND',
-        'help': 'SERVICE_HELP',
+        'my_meeting': 'MY_MEETING',
         'book_empty': 'BOOKING_EMPTY',
         'book_header': 'BOOKING_ACTIVITY_',
+        'all_meeting' : 'ALL_MEETING',
+        'recent' : 'RECENT_MEETING',
+        'search' : 'SEARCH_MEETING'
     }
 
     menu = {
         'button': [
             {
-                "name": "服务",
+                "name": "我的会议",
                 "sub_button": [
                     {
                         "type": "click",
-                        "name": "抢啥",
-                        "key": event_keys['book_what'],
-                    },
-                    {
-                        "type": "click",
-                        "name": "查票",
-                        "key": event_keys['get_ticket'],
-                    },
-                    {
-                        "type": "click",
-                        "name": "绑定",
+                        "name": "我组织的会议",
                         "key": event_keys['account_bind'],
                     },
                     {
                         "type": "click",
-                        "name": "帮助",
-                        "key": event_keys['help'],
+                        "name": "我参与的会议",
+                        "key": event_keys['my_meeting'],
                     }
                 ]
             },
             {
-                "name": "抢票",
-                "sub_button": []
+                "name": "服务",
+                "sub_button": [
+                    {
+                        "type": "click",
+                        "name": "所有会议",
+                        "key": event_keys['all_meeting'],
+                    },
+                    {
+                        "type": "click",
+                        "name": "近期会议",
+                        "key": event_keys['recent'],
+                    },
+                    {
+                        "type": "click",
+                        "name": "查询会议",
+                        "key": event_keys['search']
+                    }
+                ]
             }
         ]
     }
@@ -65,32 +74,18 @@ class CustomWeChatView(WeChatView):
 
     @classmethod
     def update_book_button(cls, activities):
-        book_btn = cls.get_book_btn()
-        if len(activities) == 0:
-            book_btn['type'] = 'click'
-            book_btn['key'] = cls.event_keys['book_empty']
-        else:
-            book_btn.pop('type', None)
-            book_btn.pop('key', None)
-        book_btn['sub_button'] = list()
-        for act in activities:
-            book_btn['sub_button'].append({
-                'type': 'click',
-                'name': act['name'],
-                'key': cls.event_keys['book_header'] + str(act['id']),
-            })
+        print("dfdf")
+
+
 
     @classmethod
     def update_menu(cls, activities=None):
-        """
-        :param activities: list of Activity
-        :return: None
-        """
         if activities is not None:
             if len(activities) > 5:
                 cls.logger.warn('Custom menu with %d activities, keep only 5', len(activities))
             cls.update_book_button([{'id': act.id, 'name': act.name} for act in activities[:5]])
         else:
+            print("fdsfsd")
             current_menu = cls.lib.get_wechat_menu()
             existed_buttons = list()
             for btn in current_menu:
@@ -108,3 +103,4 @@ class CustomWeChatView(WeChatView):
                 id__in=activity_ids, status=Activity.STATUS_PUBLISHED, book_end__gt=timezone.now()
             ).order_by('book_end')[: 5])
         cls.lib.set_wechat_menu(cls.menu)
+
