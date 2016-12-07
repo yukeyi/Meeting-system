@@ -5,7 +5,7 @@ from codex.baseerror import LogicError
 
 class User(models.Model):
     open_id = models.CharField(max_length=64, unique=True, db_index=True)
-    student_id = models.CharField(max_length=32, unique=True, db_index=True)
+    #student_id = models.CharField(max_length=32, unique=True, db_index=True)
 
     @classmethod
     def get_by_openid(cls, openid):
@@ -48,8 +48,7 @@ class Ticket(models.Model):
 class UserLogin(models.Model):
     user_id = models.IntegerField()
     open_id = models.CharField(max_length=64, unique=True, db_index=True)
-    email = models.CharField(max_length=64)
-
+    email = models.CharField(max_length=64, null=True)
 
 class ConfBasic(models.Model):
     conf_id = models.IntegerField()                   # 会议id
