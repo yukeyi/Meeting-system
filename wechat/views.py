@@ -11,7 +11,7 @@ class CustomWeChatView(WeChatView):
     lib = WeChatLib(WECHAT_TOKEN, WECHAT_APPID, WECHAT_SECRET)
 
     handlers = [
-        SearchHandler, BindAccountHandler,  AllMeetingsHandler, RecentMeetingHandler, MyMeetingHandler, FakeSearchHandler,
+        BindAccountHandler,  AllMeetingsHandler, RecentMeetingHandler, MyMeetingHandler, FakeSearchHandler, SearchHandler,
     ]
     error_message_handler = ErrorHandler
     default_handler = DefaultHandler
