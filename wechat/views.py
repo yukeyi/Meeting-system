@@ -35,12 +35,12 @@ class CustomWeChatView(WeChatView):
                 "sub_button": [
                     {
                         "type": "click",
-                        "name": "我组织的会议",
+                        "name": "会佳账户绑定",
                         "key": event_keys['account_bind'],
                     },
                     {
                         "type": "click",
-                        "name": "我参与的会议",
+                        "name": "我收藏的会议",
                         "key": event_keys['my_meeting'],
                     }
                 ]
