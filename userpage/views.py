@@ -1,9 +1,10 @@
 from codex.baseerror import *
 from codex.baseview import APIView
-
+from wechat.models import ConfBasic
 from wechat.models import User
 import urllib.request
 import urllib.parse
+from django.http import HttpResponse
 
 class UserBind(APIView):
 
@@ -36,3 +37,41 @@ class UserBind(APIView):
         self.validate_user()
         user.student_id = self.input['student_id']
         user.save()
+
+
+
+
+
+class Postmessage(APIView):
+    def get(self):
+        self.check_input('id')
+        print(self.input['id'])
+        meet = ConfBasic.objects.get(conf_id=self.input['id'])
+        result = {
+            'id' : meet.conf_id,
+            'name': meet.name,
+            'image': meet.image,
+            'start_date': str(meet.start_date),
+            'end_date': str(meet.end_date),
+            'location': meet.location,
+            'version': meet.version,
+            'privateType': meet.private_type,
+            'sequence': meet.sequence,
+            'status': meet.status,
+            'desc': meet.decs,
+            'website': meet.website,
+            'phone': meet.phone,
+            'fax': meet.fax,
+            'email': meet.email,
+        #    'address': ,
+            'weibo': meet.wei_bo,
+            'weixin': meet.wei_xin,
+            'qq': meet.qq,
+            'longtitude': meet.longitude,
+            'latitude': meet.latitude,
+            'timezone': meet.timezone,
+        }
+        print (result)
+        return result
+
+

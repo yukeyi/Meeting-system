@@ -85,7 +85,6 @@ class CustomWeChatView(WeChatView):
                 cls.logger.warn('Custom menu with %d activities, keep only 5', len(activities))
             cls.update_book_button([{'id': act.id, 'name': act.name} for act in activities[:5]])
         else:
-            print("fdsfsd")
             current_menu = cls.lib.get_wechat_menu()
             existed_buttons = list()
             for btn in current_menu:

@@ -10,4 +10,5 @@ __author__ = "Epsirom"
 
 urlpatterns = [
     url(r'^user/bind/?$', UserBind.as_view()),
+    url(r'^message/?$', Postmessage.as_view()),
 ]

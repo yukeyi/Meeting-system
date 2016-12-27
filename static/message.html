@@ -1,0 +1,142 @@
+﻿<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="message.css">
+
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script type="text/javascript">
+function UrlSearch()
+{
+   var name,value;
+   var str=location.href; //取得整个地址栏
+   var num=str.indexOf("?");
+   var num2=str.indexOf("&");
+   if(num2 == -1)
+	str = str.substr(num+1);
+   else
+    str=str.substr(num+1,num2-num-1); //取得所有参数   stringvar.substr(start [, length ]
+   //alert(str);
+   //alert(str[0]);
+   //var arr=str.split("&"); //各个参数放到数组里
+   //for(var i=0;i < arr.length;i++){
+   // num=arr[i].indexOf("=");
+   // if(num>0){
+   //  name=arr[i].substring(0,num);
+   //  value=arr[i].substr(num+1);
+   //  this[name]=value;
+   //  }
+   // }
+            $.ajax({
+                type: "get",
+                dataType: "json",
+                data:{id:Number(str)},
+                //url: "http://60.205.137.139/adminweb/REST/API-V2/confInfo?confid=1",
+                url: ("http://59.66.138.35/api/u/message"),
+                success: function (msg) {
+                    console.log(msg);
+					var s = "<img class=\"myimg\" src=\""+ "http://60.205.137.139/adminweb/"+ msg['data']['image'] +"\"/>"
+					//s = "<div id = \"tupian\" background = url(\"http://60.205.137.139/adminweb/" + msg['data']['image'] + "\")></div)"
+					//document.getElementById("id").innerHTML = msg['data']['id'];
+					document.getElementById("name").innerHTML = msg['data']['name'];
+					document.getElementById("image").innerHTML = s;
+					document.getElementById("start_date").innerHTML = msg['data']['start_date'];
+					document.getElementById("end_date").innerHTML = msg['data']['end_date'];
+					document.getElementById("location").innerHTML = msg['data']['location'];
+					//document.getElementById("version").innerHTML = msg['data']['version'];
+					//document.getElementById("privateType").innerHTML = msg['data']['privateType'];
+					//document.getElementById("sequence").innerHTML = msg['data']['sequence'];
+					//document.getElementById("status").innerHTML = msg['data']['status'];
+					document.getElementById("desc").innerHTML = msg['data']['desc'];
+					document.getElementById("website").innerHTML = msg['data']['website'];
+					document.getElementById("phone").innerHTML = msg['data']['phone'];
+					document.getElementById("fax").innerHTML = msg['data']['fax'];
+					document.getElementById("email").innerHTML = msg['data']['email'];
+					document.getElementById("weixin").innerHTML = msg['data']['weixin'];
+					document.getElementById("weibo").innerHTML = msg['data']['weibo'];
+					document.getElementById("qq").innerHTML = msg['data']['qq'];
+					document.getElementById("longtitude").innerHTML = msg['data']['longtitude'];
+					document.getElementById("latitude").innerHTML = msg['data']['latitude'];
+					document.getElementById("timezone").innerHTML = msg['data']['timezone'];
+                }
+            });
+}
+var Request=new UrlSearch(); //实例化
+//alert(Request.id);
+</script>
+</head>
+<body>
+    <!--<table>
+        <thead>
+            <div id = "id"></div>
+			<div id = "name"></div>
+			<div id = "image"></div>
+			<div id = "start_date"></div>
+			<div id = "end_date"></div>
+			<div id = "location"></div>
+			<div id = "version"></div>
+			<div id = "privateType"></div>
+			<div id = "sequence"></div>
+			<div id = "status"></div>
+			<div id = "desc"></div>
+			<div id = "website"></div>
+			<div id = "phone"></div>
+			<div id = "fax"></div>
+			<div id = "email"></div>
+			<div id = "weibo"></div>
+			<div id = "weixin"></div>
+			<div id = "qq"></div>
+			<div id = "longtitude"></div>
+			<div id = "latitude"></div>
+			<div id = "timezone"></div>
+        </thead>
+        <tbody></tbody>
+    </table>-->
+	<div id = "header">会议基本信息</div>
+	<div id = "image"></div>
+	<div id = "name"></div>
+	<div id = "date">
+		<div id = "start_date"></div>
+		<div id = "gang">-</div>
+		<div id = "end_date"></div>
+	</div>
+	<div id = "timezone"></div>
+	<div id = "location"></div>
+
+	<div id = "titude" class = "content">
+	    <div class = "lab">经度：</div>
+		<div class = "lalv" id = "longtitude"></div>
+	</div>
+	<div class = "content" id = "titude1">
+		<div class = "lab">纬度：</div>
+		<div class = "lalv" id = "latitude"></div>
+	</div>
+	<div id = "web" class = "content">
+		<div class = "lab">网站：</div>
+		<div id = "website" class = "lalv"></div>	
+	</div>
+	<div id = "phonenumber" class = "content">
+		<div class = "lab">电话：</div>
+		<div id = "phone" class = "lalv"></div>	
+	</div>
+	<div id = "faxnum" class = "content">
+		<div class = "lab">传真：</div>
+		<div id = "fax" class = "lalv"></div>	
+	</div>
+	<div id = "youxiang" class = "content">
+		<div class = "lab">邮箱：</div>
+		<div id = "email" class = "lalv"></div>	
+	</div>
+	<div id = "weibonum" class = "content">
+		<div class = "lab">微博：</div>
+		<div id = "weibo" class = "lalv"></div>	
+	</div>
+	<div id = "weixinnum" class = "content">
+		<div class = "lab">微信：</div>
+		<div id = "weixin" class = "lalv"></div>	
+	</div>
+	<div id = "qqnum" class = "content">
+		<div class = "lab">QQ：</div>
+		<div id = "qq" class = "lalv"></div>	
+	</div>
+	<div id = "desc"></div>
+</body>
+</html>

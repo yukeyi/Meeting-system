@@ -1,0 +1,88 @@
+body{
+
+}
+#header{
+	background-color: #007799;
+	height: 8vh;
+	font-family: Youyuan;
+	font-size: 4vh;
+	color: white;
+	text-align:center;
+	line-height: 8vh;
+}
+#image{
+	height:32 vh;
+}
+.myimg{
+	width: 100%;
+	height: 32vh;
+}
+#name{
+	height: 10vh;
+	font-family: SimHei;
+	line-height: 5vh;
+	font-size: 3vh;
+	font-weight: bold;
+}
+#date{
+	height: 4vh;
+}
+#start_date{
+	font-family: SimHei;
+	line-height: 4vh;
+	font-size: 2.5vh;
+	width:24%;
+	float:left;
+}
+#gang{
+	font-family: SimHei;
+	line-height: 4vh;
+	font-size: 2.5vh;
+	width:10%;
+	float:left;
+	text-align:center;
+}
+#end_date{
+	font-family: SimHei;
+	line-height: 4vh;
+	font-size: 2.5vh;
+	width:35%;
+	float:left;
+}
+#location{
+	height: 8vh;
+	font-family: SimHei;
+	line-height: 4vh;
+	font-size: 2.5vh;
+}
+#timezone{
+	height: 4vh;
+	font-family: SimHei;
+	line-height: 4vh;
+	font-size: 2.5vh;
+}
+.content{
+	height: 4vh;
+	border-top: 0.15vh #886600 solid;
+}
+.lab{
+	height: 3.8vh;
+	line-height: 3.8vh;
+	font-size: 2.2vh;
+	width: 15%;
+	text-align:center;
+	font-weight:bold;
+	float:left;
+}
+.lalv{
+	height: 3.8vh;
+	line-height: 3.8vh;
+	font-size: 2.2vh;
+	float:left;
+}
+#desc{
+	border-top: 0.15vh #886600 solid;
+	font-family: SimHei;
+	line-height: 2.5vh;
+	font-size: 1.5vh;
+}

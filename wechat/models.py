@@ -50,6 +50,7 @@ class UserLogin(models.Model):
     open_id = models.CharField(max_length=64, unique=True, db_index=True)
     email = models.CharField(max_length=64, null=True)
     watching_page = models.IntegerField(default=1)
+    my_conf = models.ManyToManyField('ConfBasic')
 
 class ConfBasic(models.Model):
     conf_id = models.IntegerField()                   # 会议id
@@ -78,7 +79,7 @@ class ConfBasic(models.Model):
     qq = models.CharField(max_length=64)
     longitude = models.CharField(max_length=64)
     latitude = models.CharField(max_length=64)
-    timezone = models.CharField(max_length=16)
+    timezone = models.CharField(max_length=64)
 
     STATUS_INIT = 0
     STATUS_PREP = 1
