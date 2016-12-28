@@ -9,12 +9,21 @@ function UrlSearch()
 {
    var name,value;
    var str=location.href; //取得整个地址栏
+    var str0;
    var num=str.indexOf("?");
-   var num2=str.indexOf("&");
-   if(num2 == -1)
-	str = str.substr(num+1);
-   else
-    str=str.substr(num+1,num2-num-1); //取得所有参数   stringvar.substr(start [, length ]
+   var num2=str.indexOf("=");
+   var num3=str.indexOf("@");
+   alert(num2);
+    alert(num3);
+    if(num2 == -1) {
+        str0 = str.substr(num3 + 1);
+        str = str.substr(num + 1, num3 - num - 1);
+    }
+    else {
+        str0 = str.substr(num3 + 1, num2 - num - 1);
+        str = str.substr(num + 1, num3 - num - 1);
+    }
+
    //alert(str);
    //alert(str[0]);
    //var arr=str.split("&"); //各个参数放到数组里
@@ -31,7 +40,7 @@ function UrlSearch()
                 dataType: "json",
                 data:{id:Number(str)},
                 //url: "http://60.205.137.139/adminweb/REST/API-V2/confInfo?confid=1",
-                url: ("http://59.66.138.35/api/u/message"),
+                url: ("http://183.172.98.130/api/u/message"),
                 success: function (msg) {
                     console.log(msg);
 					var s = "<img class=\"myimg\" src=\""+ "http://60.205.137.139/adminweb/"+ msg['data']['image'] +"\"/>"
@@ -39,7 +48,7 @@ function UrlSearch()
 					//document.getElementById("id").innerHTML = msg['data']['id'];
 					document.getElementById("chargebuttonclick").onclick = fn1;
 					function fn1(){
-						window.location.href="charge.html?" + str;
+						window.location.href="charge.html?" + str + "@" + str0;
 					}
 					//javascript:window.location.href='
 					document.getElementById("name").innerHTML = msg['data']['name'];

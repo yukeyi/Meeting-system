@@ -9,7 +9,7 @@ import json
 __author__ = "Epsirom"
 
 def AddHeader(path):
-    return ("http://59.66.138.35/"+ path)
+    return ("http://183.172.98.130/"+ path)
 
 class ErrorHandler(WeChatHandler):
 
@@ -51,7 +51,7 @@ class BindAccountHandler(WeChatHandler):
         user_response = urllib.request.urlopen(user_req)
         user_content = user_response.read().decode('utf-8')
         user_info = json.loads(user_content)
-        print(user_info)
+        #print(user_info)
         temp = UserLogin.objects.filter(open_id=openid)
 
         if temp:
@@ -64,7 +64,7 @@ class BindAccountHandler(WeChatHandler):
             data['sex'] = user_info['sex']
             data['location'] = user_info['country'] + user_info['province'] + user_info['city']
             data['language'] = user_info['language']
-            print(data)
+            #print(data)
             hj_url = 'http://60.205.137.139/adminweb/REST/API-V2/loginToChinaByWeixin'
             hj_post = urllib.parse.urlencode(data).encode(encoding='utf-8')
             hj_req = urllib.request.Request(hj_url)
@@ -158,7 +158,7 @@ class AllMeetingsHandler(WeChatHandler):
                 if (temp[0].my_conf.all().filter(conf_id=re['data'][index]['id'])):
                     url = 'http://m2.huiplus.com.cn/app/#/confinfo/'+str(re['data'][index]['id'])
                 else:
-                    url = AddHeader('message.html?'+str(re['data'][index]['id']))
+                    url = AddHeader('message.html?'+str(re['data'][index]['id'])+ '@' +str(temp[0].user_id))
                 ans.append({
                     'Title': name,
                     'Url': url,
@@ -404,7 +404,7 @@ class SearchHandler(WeChatHandler):
                 if (temp[0].my_conf.all().filter(conf_id=re['data'][index]['id'])):
                     url = 'http://m2.huiplus.com.cn/app/#/confinfo/'+str(re['data'][index]['id'])
                 else:
-                    url = AddHeader('message.html'+str(re['data'][index]['id']))
+                    url = AddHeader('message.html'+str(re['data'][index]['id'])+ '@' +str(temp[0].user_id))
                 ans.append({
                     'Title': name,
                     'Url': url,

@@ -4,6 +4,7 @@ from wechat.models import ConfBasic
 from wechat.models import User
 import urllib.request
 import urllib.parse
+import json
 from django.http import HttpResponse
 
 class UserBind(APIView):
@@ -73,5 +74,20 @@ class Postmessage(APIView):
         }
         print (result)
         return result
+
+class postJoinConf(APIView):
+    def get(self):
+        self.check_input('confid','userid')
+        data = {}
+        data['confid'] = self.input['confid']
+        data['userid'] = self.input['userid']
+        data['type'] = 0
+        hj_url = 'http://60.205.137.139/adminweb/REST/API-V2/joinConf'
+        hj_post = urllib.parse.urlencode(data).encode(encoding='utf-8')
+        hj_req = urllib.request.Request(hj_url)
+        hj_response = urllib.request.urlopen(hj_req, hj_post)
+        hj_content = hj_response.read().decode('utf-8')
+        hj_info = json.loads(hj_content)
+        return hj_info['data']
 
 
