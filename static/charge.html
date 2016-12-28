@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css"></link>
+		<link type="text/css" rel="stylesheet" href="css/payStyle.css"></link>
+		<script type="text/javascript" src="js/bootstrap.min.js"></script>
+		<script src="http://code.jquery.com/jquery-latest.js"></script>
+		<script type="text/javascript">
+			function UrlSearch()
+			{
+			   var name,value;
+			   var str=location.href; 
+			   var num=str.indexOf("?");
+			   var num2=str.indexOf("&");
+			   if(num2 == -1)
+				str = str.substr(num+1);
+			   else
+				str=str.substr(num+1,num2-num-1);
+			   console.log(str);
+						$.ajax({
+							type: "get",
+							dataType: "json",
+							data:{id:Number(str)},
+							//url: "http://60.205.137.139/adminweb/REST/API-V2/confInfo?confid=1",
+							url: ("http://59.66.138.35/api/u/message"),
+							success: function (msg) {
+								console.log(msg);
+								var s = "<img class=\"myimg\" src=\""+ "http://60.205.137.139/adminweb/"+ msg['data']['image'] +"\"/>"
+								document.getElementById("title").innerHTML = msg['data']['name'];
+								document.getElementById("joininclick").onclick = fn1;
+								function fn1(){
+									window.location.href="joinin.html?" + str;
+								}
+							}
+						});
+			}
+			var Request=new UrlSearch(); 
+			//alert(Request.id);
+		</script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="row clearfix">
+				<div class="col-md-12 column">
+					<div class = "page-title">
+						<h3 class="text-center">
+							<div id = "title"></div>
+						</h3>
+					</div>
+					<h3 class="text-center">
+						<div id = "price">￥5.00</div>
+					</h3>
+					<div class = "img"><IMG src="./media/1.jpg" border=0></div>
+					<div class="com">
+						<div id = "meeting1">收款方</div>
+						<div id = "meeting2">觅听</div>
+					</div>
+					<br/><br/>
+					<div id = "pay"><button type="button" class="btn btn-default btn-primary" id = "joininclick">֧支付成功报名</button></div>
+					<br/><br/><br/>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

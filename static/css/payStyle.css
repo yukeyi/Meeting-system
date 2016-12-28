@@ -1,0 +1,41 @@
+.page-title{
+	background-color: #448AFF;
+	border-radius: 5px;
+	height:70px;
+	color:white;
+}
+#title{
+	line-height:70px;
+}
+#price{
+	font-size:80px;
+	margin-top:5%;
+}
+.com{
+	text-align:center;
+	height:60px;
+	border:1px solid black;
+	border-radius: 5px;
+	margin-top:5%;
+}
+#meeting1{
+	float:left;
+	line-height:60px;
+	margin-left:2%;
+	font-size:20px;
+	font-weight:bold;
+}
+#meeting2{
+	margin-left:92%;
+	line-height:60px;
+	font-size:20px;
+	font-weight:bold;
+}
+.img{
+	margin-top:5%;
+	text-align:center;
+}
+#pay{
+	margin-left:45%;
+	color:#448AFF;
+}

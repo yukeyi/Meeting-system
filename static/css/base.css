@@ -1,0 +1,12 @@
+#login, #regist, #changeinfo, #organizeactivity{
+    margin-top: 5%;
+}
+
+body{ 
+    font-family: Microsoft YaHei,'宋体' , Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
+    background-color: #778899;
+}
+
+#headImg{
+    margin-left: 30%;
+}
