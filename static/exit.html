@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css"></link>
+		<link type="text/css" rel="stylesheet" href="css/exit.css"></link>
+		<script type="text/javascript" src="js/bootstrap.min.js"></script>
+		<script src="http://code.jquery.com/jquery-latest.js"></script>
+		<script type="text/javascript">
+			function UrlSearch()
+			{
+			   var name,value;
+			   var str=location.href; //取得整个地址栏
+				var str0;
+			   var num=str.indexOf("?");
+			   var num2=str.indexOf("=");
+			   var num3=str.indexOf("@");
+				if(num2 == -1) {
+					str0 = str.substr(num3 + 1);
+					str = str.substr(num + 1, num3 - num - 1);
+				}
+				else {
+					str0 = str.substr(num3 + 1, num2 - num - 1);
+					str = str.substr(num + 1, num3 - num - 1);
+				}
+
+						$.ajax({
+							type: "get",
+							dataType: "json",
+							data:{id:Number(str)},
+							//url: "http://60.205.137.139/adminweb/REST/API-V2/confInfo?confid=1",
+							url: ("http://183.172.98.130/api/u/message"),
+							success: function (msg) {
+								console.log(msg);
+								var s = "<img class=\"myimg\" src=\""+ "http://60.205.137.139/adminweb/"+ msg['data']['image'] +"\"/>"
+								//s = "<div id = \"tupian\" background = url(\"http://60.205.137.139/adminweb/" + msg['data']['image'] + "\")></div)"
+								//document.getElementById("id").innerHTML = msg['data']['id'];
+								document.getElementById("exitclick").onclick = fn1;
+								function fn1(){
+										window.location.href="exitsuccess.html?" + str + "@" + str0;
+										}
+									
+							
+							//javascript:window.location.href='
+							document.getElementById("title").innerHTML = msg['data']['name'];
+							document.getElementById("img").innerHTML = s;
+								
+							}
+						});
+			}
+			var Request=new UrlSearch(); //实例化
+			//alert(Request.id);
+			</script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="row clearfix">
+				<div class="col-md-12 column">
+					<div class = "page-title">
+						<h3 class="text-center">
+							<div id = "title"></div>
+						</h3>
+					</div>
+					<div id = "img"></div>
+					<div class="com">
+						<div id = "texthint">是否确认退出该会议？</div>
+					</div>
+					<br/><br/>
+					<div id = "exit">
+						<button type="button" class="btn btn-default btn-primary" id = "exitclick">
+							确认退出
+						</button>
+					</div>
+					<br/><br/><br/>
+				</div>
+			</div>
+		</div>
+
+	</body>
+</html>

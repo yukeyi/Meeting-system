@@ -234,7 +234,7 @@ class RecentMeetingHandler(WeChatHandler):
                 if (temp[0].my_conf.all().filter(conf_id=re['data'][index]['id'])):
                     url = 'http://m2.huiplus.com.cn/app/#/confinfo/'+str(re['data'][index]['id'])
                 else:
-                    url = AddHeader('message.html?'+str(re['data'][index]['id']))
+                    url = AddHeader('message.html?'+str(re['data'][index]['id'])+ '@' +str(temp[0].user_id))
                 ans.append({
                     'Title': name,
                     'Url': url,
@@ -309,7 +309,79 @@ class MyMeetingHandler(WeChatHandler):
                 if (temp[0].my_conf.all().filter(conf_id=re['data'][index]['id'])):
                     url = 'http://m2.huiplus.com.cn/app/#/confinfo/'+str(re['data'][index]['id'])
                 else:
-                    url = AddHeader('message.html?'+str(re['data'][index]['id']))
+                    url = AddHeader('message.html?'+str(re['data'][index]['id'])+ '@' +str(temp[0].user_id))
+                ans.append({
+                    'Title': name,
+                    'Url': url,
+                    'PicUrl': 'http://60.205.137.139/adminweb/'+ re['data'][index]['image'],
+                })
+            return self.reply_news(ans)
+        else:
+            return self.reply_text("您还没进行过绑定")
+
+class ExitMeetingHandler(WeChatHandler):
+
+    def check(self):
+        return self.is_event_click(self.view.event_keys['exit_meeting'])
+
+    def handle(self):
+        openid = self.input['FromUserName']
+        temp = UserLogin.objects.filter(open_id=openid)
+        if temp:
+            url = 'http://60.205.137.139/adminweb/REST/API-V2/favoriteConfList?userid='+str(temp[0].user_id)+'&page='+str(1)+'&page_size='+str(3)
+            req = urllib.request.Request(url)
+            response = urllib.request.urlopen(req)
+            content = response.read().decode('utf-8')
+            re = json.loads(content)
+
+            #用会议详情接口存信息
+            for index in range(0, len(re['data'])):
+                messageurl = 'http://60.205.137.139/adminweb/REST/API-V2/confInfo?confid=' + str(re['data'][index]['id'])
+                messagereq = urllib.request.Request(messageurl)
+                messageresponse = urllib.request.urlopen(messagereq)
+                messagecontent = messageresponse.read().decode('utf-8')
+                mesre = json.loads(messagecontent)
+                if(not(ConfBasic.objects.filter(conf_id=re['data'][index]['id']))):
+                    createActivity = ConfBasic.objects.create(
+                        conf_id = mesre['data'][index]['id'],
+                        name = mesre['data'][index]['name'],
+                        start_date = mesre['data'][index]['start_date'],
+                        end_date = mesre['data'][index]['end_date'],
+                        logo = mesre['data'][index]['logo'],
+                        location = mesre['data'][index]['location'],
+                        image = mesre['data'][index]['image'],
+                        version = mesre['data'][index]['version'],
+                        private = mesre['data'][index]['private'],
+                        private_type = mesre['data'][index]['privateType'],
+                        sequence = mesre['data'][index]['sequence'],
+                        status = mesre['data'][index]['status'],
+                        desc = mesre['data'][index]['detail']['desc'],
+                        website = mesre['data'][index]['detail']['website'],
+                        phone = mesre['data'][index]['detail']['phone'],
+                        fax = mesre['data'][index]['detail']['fax'],
+                        email = mesre['data'][index]['detail']['email'],
+                        wei_bo = mesre['data'][index]['detail']['weibo'],
+                        wei_xin = mesre['data'][index]['detail']['weixin'],
+                        qq = mesre['data'][index]['detail']['qq'],
+                        longtitude = mesre['data'][index]['detail']['longtitude'],
+                        latitude = mesre['data'][index]['detail']['latitude'],
+                        timezone = mesre['data'][index]['detail']['timeZone'],
+                    )
+                    createActivity.save()
+
+
+
+
+            if len(re['data']) == 0:
+                return self.reply_text("您还没有加入任何会议")
+
+            ans = []
+            for index in range(0, len(re['data'])):
+                if len(re['data'][index]['name']) > 15:
+                    name = re['data'][index]['name'][:15]+"..."
+                else:
+                    name = re['data'][index]['name']
+                url = AddHeader('exit.html?'+str(re['data'][index]['id'])+ '@' +str(temp[0].user_id))
                 ans.append({
                     'Title': name,
                     'Url': url,
@@ -404,7 +476,7 @@ class SearchHandler(WeChatHandler):
                 if (temp[0].my_conf.all().filter(conf_id=re['data'][index]['id'])):
                     url = 'http://m2.huiplus.com.cn/app/#/confinfo/'+str(re['data'][index]['id'])
                 else:
-                    url = AddHeader('message.html?'+str(re['data'][index]['id'])+ '@' +str(temp[0].user_id))
+                    url = AddHeader('message.html?'+str(re['data'][index]['id']) + '@' +str(temp[0].user_id))
                 ans.append({
                     'Title': name,
                     'Url': url,
@@ -426,3 +498,82 @@ class MeetingMessageHandler(WeChatHandler):
         else:
             return self.reply_text("您还没进行过绑定")
 
+
+class Quicklook(WeChatHandler):
+
+    def check(self):
+        return self.is_event_click(self.view.event_keys['quick_look'])
+
+    def handle(self):
+        openid = self.input['FromUserName']
+        temp = UserLogin.objects.filter(open_id=openid)
+        if temp:
+            url = 'http://60.205.137.139/adminweb/REST/API-V2/favoriteConfList?userid='+str(temp[0].user_id)+'&page='+str(1)+'&page_size='+str(3)
+            req = urllib.request.Request(url)
+            response = urllib.request.urlopen(req)
+            content = response.read().decode('utf-8')
+            re = json.loads(content)
+
+            #用会议详情接口存信息
+            for index in range(0, len(re['data'])):
+                messageurl = 'http://60.205.137.139/adminweb/REST/API-V2/confInfo?confid=' + str(re['data'][index]['id'])
+                messagereq = urllib.request.Request(messageurl)
+                messageresponse = urllib.request.urlopen(messagereq)
+                messagecontent = messageresponse.read().decode('utf-8')
+                mesre = json.loads(messagecontent)
+                if(not(ConfBasic.objects.filter(conf_id=re['data'][index]['id']))):
+                    createActivity = ConfBasic.objects.create(
+                        conf_id = mesre['data'][index]['id'],
+                        name = mesre['data'][index]['name'],
+                        start_date = mesre['data'][index]['start_date'],
+                        end_date = mesre['data'][index]['end_date'],
+                        logo = mesre['data'][index]['logo'],
+                        location = mesre['data'][index]['location'],
+                        image = mesre['data'][index]['image'],
+                        version = mesre['data'][index]['version'],
+                        private = mesre['data'][index]['private'],
+                        private_type = mesre['data'][index]['privateType'],
+                        sequence = mesre['data'][index]['sequence'],
+                        status = mesre['data'][index]['status'],
+                        desc = mesre['data'][index]['detail']['desc'],
+                        website = mesre['data'][index]['detail']['website'],
+                        phone = mesre['data'][index]['detail']['phone'],
+                        fax = mesre['data'][index]['detail']['fax'],
+                        email = mesre['data'][index]['detail']['email'],
+                        wei_bo = mesre['data'][index]['detail']['weibo'],
+                        wei_xin = mesre['data'][index]['detail']['weixin'],
+                        qq = mesre['data'][index]['detail']['qq'],
+                        longtitude = mesre['data'][index]['detail']['longtitude'],
+                        latitude = mesre['data'][index]['detail']['latitude'],
+                        timezone = mesre['data'][index]['detail']['timeZone'],
+                    )
+                    createActivity.save()
+
+
+
+
+            if len(re['data']) == 0:
+                return self.reply_text("您没有关注或收藏的会议")
+
+            ans = "您的会议日程如下：\n"
+            meetlist = []
+            for index in range(0, len(re['data'])):
+                if len(re['data'][index]['name']) > 15:
+                    name = re['data'][index]['name'][:11]+"..."
+                else:
+                    name = re['data'][index]['name']
+                starttime = re['data'][index]['start_date']
+                meetlist.append((starttime,name))
+                #ans.append({
+                #    'Title': name,
+                #    'Url': url,
+                #    'PicUrl': 'http://60.205.137.139/adminweb/'+ re['data'][index]['image'],
+                #})
+            meetlist.sort()
+            for i in meetlist:
+                ans = ans + i[0] + "\n  " + i[1]
+                if(i != meetlist[-1]):
+                    ans = ans + "\n"
+            return self.reply_text(ans)
+        else:
+            return self.reply_text("您还没进行过绑定")

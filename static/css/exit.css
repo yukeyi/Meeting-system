@@ -1,0 +1,30 @@
+.page-title{
+	background-color: #448AFF;
+	border-radius: 5px;
+	height:70px;
+	color:white;
+}
+#title{
+	line-height:70px;
+  text-align:center;
+}
+.com{
+	text-align:center;
+	height:60px;
+	border:1px solid black;
+	border-radius: 5px;
+	margin-top:5%;
+}
+#texthint{
+  line-height: 60px;
+  font-size: 25px;
+  font-weight: bold;
+}
+.img{
+	margin-top:2%;
+	text-align:center;
+}
+#exit{
+	margin-left:46%;
+	color:#448AFF;
+}

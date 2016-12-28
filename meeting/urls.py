@@ -18,11 +18,11 @@ from django.contrib import admin
 
 from wechat.views import CustomWeChatView
 from meeting.views import StaticFileView
-
+admin.autodiscover()
 
 urlpatterns = [
     url(r'^wechat/?$', CustomWeChatView.as_view()),
-    url(r'^admin/', admin.site.urls),
+    url(r'^admin/', include(admin.site.urls)),
     url(r'^api/u/', include('userpage.urls')),
     url(r'^api/a/', include('adminpage.urls')),
     url(r'^', StaticFileView.as_view()),

@@ -22,19 +22,7 @@
                    str0 = str.substr(num3 + 1, num2 - num - 3);
                    str = str.substr(num + 1, num3 - num - 1);
                }
-				$.ajax({
-                    type: "get",
-                    dataType: "json",
-                    data:{confid:Number(str),userid:parseInt(str0)},
-                    //url: "http://60.205.137.139/adminweb/REST/API-V2/confInfo?confid=1",
-                    url: ("http://183.172.98.130/api/u/joinin"),
-                    success: function (msg) {
-                        if (msg['code'] == 0)
-                            alert("恭喜您，加入成功！");
-                        else
-                            alert("未查到该购票信息。");
-                    }
-                });
+				
 			   $.ajax({
                    type: "get",
                    dataType: "json",
@@ -47,7 +35,7 @@
                        document.getElementById("title").innerHTML = msg['data']['name'];
                        document.getElementById("joininclick").onclick = fn1;
                        function fn1(){
-                           window.location.href="joinin.html?" + str + "@" + str0;
+                           window.location.href="joininsuccess.html?" + str + "@" + str0;
                        }
                    }
                });

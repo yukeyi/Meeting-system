@@ -11,7 +11,7 @@ class CustomWeChatView(WeChatView):
     lib = WeChatLib(WECHAT_TOKEN, WECHAT_APPID, WECHAT_SECRET)
 
     handlers = [
-        BindAccountHandler,  AllMeetingsHandler, RecentMeetingHandler, MyMeetingHandler, FakeSearchHandler, SearchHandler,
+        Quicklook, ExitMeetingHandler, BindAccountHandler,  AllMeetingsHandler, RecentMeetingHandler, MyMeetingHandler, FakeSearchHandler, SearchHandler
     ]
     error_message_handler = ErrorHandler
     default_handler = DefaultHandler
@@ -21,6 +21,8 @@ class CustomWeChatView(WeChatView):
         'get_ticket': 'SERVICE_GET_TICKET',
         'account_bind': 'SERVICE_BIND',
         'my_meeting': 'MY_MEETING',
+        'exit_meeting': 'EXIT_MEETING',
+        'quick_look': 'QUICK_LOOK',
         'book_empty': 'BOOKING_EMPTY',
         'book_header': 'BOOKING_ACTIVITY_',
         'all_meeting' : 'ALL_MEETING',
@@ -42,6 +44,16 @@ class CustomWeChatView(WeChatView):
                         "type": "click",
                         "name": "我收藏的会议",
                         "key": event_keys['my_meeting'],
+                    },
+                    {
+                        "type": "click",
+                        "name": "退出会议",
+                        "key": event_keys['exit_meeting'],
+                    },
+                    {
+                        "type": "click",
+                        "name": "我的提醒",
+                        "key": event_keys['quick_look'],
                     }
                 ]
             },

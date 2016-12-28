@@ -98,4 +98,28 @@ class postJoinConf(APIView):
         temp[0].save()
         return hj_info['data']
 
+class postExitConf(APIView):
+    def get(self):
+        self.check_input('confid','userid')
+        data = {}
+        data['confid'] = self.input['confid']
+        data['userid'] = self.input['userid']
+        hj_url = 'http://60.205.137.139/adminweb/REST/API-V2/cancelConf'
+        hj_post = urllib.parse.urlencode(data).encode(encoding='utf-8')
+        hj_req = urllib.request.Request(hj_url)
+        hj_response = urllib.request.urlopen(hj_req, hj_post)
+        hj_content = hj_response.read().decode('utf-8')
+        hj_info = json.loads(hj_content)
+
+        temp = UserLogin.objects.filter(user_id=self.input['userid'])
+        #print(temp)
+        #print("dddd")
+        #print(ConfBasic.objects)
+        conf = ConfBasic.objects.get(conf_id=self.input['confid'])
+        temp[0].my_conf.remove(conf)
+        temp[0].save()
+        return hj_info['data']
+
+
+
 

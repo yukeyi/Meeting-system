@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css"></link>
+		<link type="text/css" rel="stylesheet" href="css/joininsuccess.css"></link>
+		<script type="text/javascript" src="js/bootstrap.min.js"></script>
+		<script src="http://code.jquery.com/jquery-latest.js"></script>
+		<script type="text/javascript">
+			function UrlSearch()
+			{
+			   var name,value;
+			   var str=location.href; //取得整个地址栏
+				var str0;
+			   var num=str.indexOf("?");
+			   var num2=str.indexOf("=");
+			   var num3=str.indexOf("@");
+				if(num2 == -1) {
+					str0 = str.substr(num3 + 1);
+					str = str.substr(num + 1, num3 - num - 1);
+				}
+				else {
+					str0 = str.substr(num3 + 1, num2 - num - 1);
+					str = str.substr(num + 1, num3 - num - 1);
+				}
+
+				$.ajax({
+							type: "get",
+							dataType: "json",
+							data:{confid:parseInt(str),userid:parseInt(str0)},
+							url: ("http://183.172.98.130/api/u/exit"),
+							success: function (msg) {}
+		
+						});
+			}
+			var Request=new UrlSearch(); //实例化
+			//alert(Request.id);
+		</script>
+			
+		
+	</head>
+	<body>
+		<div class = "img">
+			<IMG src="./media/success.png" border=0>
+		</div>
+		<div id = "texthint">
+			<h1>退出成功</h1>
+		</div>
+
+	</body>
+</html>
