@@ -25,7 +25,7 @@
 				$.ajax({
                     type: "get",
                     dataType: "json",
-                    data:{confid:Number(str),userid:206},
+                    data:{confid:Number(str),userid:parseInt(str0)},
                     //url: "http://60.205.137.139/adminweb/REST/API-V2/confInfo?confid=1",
                     url: ("http://183.172.98.130/api/u/joinin"),
                     success: function (msg) {

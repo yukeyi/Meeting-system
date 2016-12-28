@@ -1,6 +1,6 @@
 from codex.baseerror import *
 from codex.baseview import APIView
-from wechat.models import ConfBasic
+from wechat.models import ConfBasic,UserLogin
 from wechat.models import User
 import urllib.request
 import urllib.parse
@@ -88,6 +88,14 @@ class postJoinConf(APIView):
         hj_response = urllib.request.urlopen(hj_req, hj_post)
         hj_content = hj_response.read().decode('utf-8')
         hj_info = json.loads(hj_content)
+
+        temp = UserLogin.objects.filter(user_id=self.input['userid'])
+        #print(temp)
+        #print("dddd")
+        #print(ConfBasic.objects)
+        conf = ConfBasic.objects.get(conf_id=self.input['confid'])
+        temp[0].my_conf.add(conf)
+        temp[0].save()
         return hj_info['data']
 
 

@@ -154,7 +154,7 @@ class AllMeetingsHandler(WeChatHandler):
                     name = re['data'][index]['name'][:15]+"..."
                 else:
                     name = re['data'][index]['name']
-                #print(re['data'])
+                print(temp[0].my_conf.all())
                 if (temp[0].my_conf.all().filter(conf_id=re['data'][index]['id'])):
                     url = 'http://m2.huiplus.com.cn/app/#/confinfo/'+str(re['data'][index]['id'])
                 else:
@@ -234,7 +234,7 @@ class RecentMeetingHandler(WeChatHandler):
                 if (temp[0].my_conf.all().filter(conf_id=re['data'][index]['id'])):
                     url = 'http://m2.huiplus.com.cn/app/#/confinfo/'+str(re['data'][index]['id'])
                 else:
-                    url = AddHeader('message.html'+str(re['data'][index]['id']))
+                    url = AddHeader('message.html?'+str(re['data'][index]['id']))
                 ans.append({
                     'Title': name,
                     'Url': url,
@@ -309,7 +309,7 @@ class MyMeetingHandler(WeChatHandler):
                 if (temp[0].my_conf.all().filter(conf_id=re['data'][index]['id'])):
                     url = 'http://m2.huiplus.com.cn/app/#/confinfo/'+str(re['data'][index]['id'])
                 else:
-                    url = AddHeader('message.html'+str(re['data'][index]['id']))
+                    url = AddHeader('message.html?'+str(re['data'][index]['id']))
                 ans.append({
                     'Title': name,
                     'Url': url,
@@ -404,7 +404,7 @@ class SearchHandler(WeChatHandler):
                 if (temp[0].my_conf.all().filter(conf_id=re['data'][index]['id'])):
                     url = 'http://m2.huiplus.com.cn/app/#/confinfo/'+str(re['data'][index]['id'])
                 else:
-                    url = AddHeader('message.html'+str(re['data'][index]['id'])+ '@' +str(temp[0].user_id))
+                    url = AddHeader('message.html?'+str(re['data'][index]['id'])+ '@' +str(temp[0].user_id))
                 ans.append({
                     'Title': name,
                     'Url': url,
