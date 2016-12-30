@@ -120,6 +120,12 @@ class postExitConf(APIView):
         temp[0].save()
         return hj_info['data']
 
+class Posthome(APIView):
+    def get(self):
+        self.check_input('id')
+        print(self.input['id'])
+        result = []
+        return result
 
 
 

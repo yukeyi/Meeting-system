@@ -1,0 +1,36 @@
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="message.css">
+    <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css"></link>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script type="text/javascript">
+function UrlSearch()
+{
+
+            $.ajax({
+                type: "get",
+                dataType: "json",
+                data:{id:1},
+                url: ("http://183.172.98.130/api/u/home"),
+                success: function (msg) {
+                    console.log(msg);
+					console.log(document.getElementById("firstname").value)
+                }
+            });
+}
+//var Request=new UrlSearch(); //实例化
+//alert(Request.id);
+</script>
+</head>
+<body>
+	<div>fuck your mother</div>
+	First name:<br>
+	<input type="text" id="firstname" value="Mickey">
+	<br>
+	Last name:<br>
+	<input type="text" id="lastname" value="Mouse">
+	<br><br>
+	<input type="submit" value="Submit" onclick="UrlSearch()">
+</body>
+</html>
