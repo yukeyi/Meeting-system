@@ -80,6 +80,7 @@ class ConfBasic(models.Model):
     longitude = models.CharField(max_length=64)
     latitude = models.CharField(max_length=64)
     timezone = models.CharField(max_length=64)
+    price = models.IntegerField()
 
     STATUS_INIT = 0
     STATUS_PREP = 1

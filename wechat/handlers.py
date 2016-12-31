@@ -9,7 +9,7 @@ import json
 __author__ = "Epsirom"
 
 def AddHeader(path):
-    return ("http://183.172.98.130/"+ path)
+    return ("http://183.172.97.125/"+ path)
 
 class ErrorHandler(WeChatHandler):
 
@@ -101,7 +101,7 @@ class AllMeetingsHandler(WeChatHandler):
                 messageresponse = urllib.request.urlopen(messagereq)
                 messagecontent = messageresponse.read().decode('utf-8')
                 mesre = json.loads(messagecontent)
-                print(mesre['data']['basic']['name'])
+                #print(len(mesre['data']))
                 #print(mesre)
                 if(not(ConfBasic.objects.filter(conf_id=re['data'][index]['id']))):
                     createActivity = ConfBasic.objects.create(
@@ -128,6 +128,7 @@ class AllMeetingsHandler(WeChatHandler):
                         longitude = mesre['data']['detail']['longitude'],
                         latitude = mesre['data']['detail']['latitude'],
                         timezone = mesre['data']['detail']['timeZone'],
+                        price = 5,
                     )
                     createActivity.save()
 
@@ -158,7 +159,7 @@ class AllMeetingsHandler(WeChatHandler):
                 if (temp[0].my_conf.all().filter(conf_id=re['data'][index]['id'])):
                     url = 'http://m2.huiplus.com.cn/app/#/confinfo/'+str(re['data'][index]['id'])
                 else:
-                    url = AddHeader('message.html?'+str(re['data'][index]['id'])+ '@' +str(temp[0].user_id))
+                    url = AddHeader('message.html?'+str(re['data'][index]['id'])+ '@' +str(temp[0].open_id))
                 ans.append({
                     'Title': name,
                     'Url': url,
@@ -184,7 +185,7 @@ class RecentMeetingHandler(WeChatHandler):
             response = urllib.request.urlopen(req)
             content = response.read().decode('utf-8')
             re = json.loads(content)
-
+            #print(len(re['data']))
             #用会议详情接口存信息
             for index in range(0, len(re['data'])):
                 messageurl = 'http://60.205.137.139/adminweb/REST/API-V2/confInfo?confid=' + str(re['data'][index]['id'])
@@ -192,31 +193,33 @@ class RecentMeetingHandler(WeChatHandler):
                 messageresponse = urllib.request.urlopen(messagereq)
                 messagecontent = messageresponse.read().decode('utf-8')
                 mesre = json.loads(messagecontent)
+                #print(mesre['data'][0]['id'])
                 if(not(ConfBasic.objects.filter(conf_id=re['data'][index]['id']))):
                     createActivity = ConfBasic.objects.create(
-                        conf_id = mesre['data'][index]['id'],
-                        name = mesre['data'][index]['name'],
-                        start_date = mesre['data'][index]['start_date'],
-                        end_date = mesre['data'][index]['end_date'],
-                        logo = mesre['data'][index]['logo'],
-                        location = mesre['data'][index]['location'],
-                        image = mesre['data'][index]['image'],
-                        version = mesre['data'][index]['version'],
-                        private = mesre['data'][index]['private'],
-                        private_type = mesre['data'][index]['privateType'],
-                        sequence = mesre['data'][index]['sequence'],
-                        status = mesre['data'][index]['status'],
-                        desc = mesre['data'][index]['detail']['desc'],
-                        website = mesre['data'][index]['detail']['website'],
-                        phone = mesre['data'][index]['detail']['phone'],
-                        fax = mesre['data'][index]['detail']['fax'],
-                        email = mesre['data'][index]['detail']['email'],
-                        wei_bo = mesre['data'][index]['detail']['weibo'],
-                        wei_xin = mesre['data'][index]['detail']['weixin'],
-                        qq = mesre['data'][index]['detail']['qq'],
-                        longtitude = mesre['data'][index]['detail']['longtitude'],
-                        latitude = mesre['data'][index]['detail']['latitude'],
-                        timezone = mesre['data'][index]['detail']['timeZone'],
+                        conf_id=mesre['data']['basic']['id'],
+                        name=mesre['data']['basic']['name'],
+                        start_date=mesre['data']['basic']['startDate'],
+                        end_date=mesre['data']['basic']['endDate'],
+                        # logo = mesre['data']['logo'],
+                        location=mesre['data']['basic']['location'],
+                        image=mesre['data']['basic']['image'],
+                        version=mesre['data']['basic']['version'],
+                        # private = mesre['data']['basic']['isPrivate'],
+                        private_type=mesre['data']['detail']['privateType'],
+                        sequence=mesre['data']['basic']['sequence'],
+                        status=mesre['data']['basic']['status'],
+                        decs=mesre['data']['detail']['desc'],
+                        website=mesre['data']['detail']['website'],
+                        phone=mesre['data']['detail']['phone'],
+                        fax=mesre['data']['detail']['fax'],
+                        email=mesre['data']['detail']['email'],
+                        wei_bo=mesre['data']['detail']['weibo'],
+                        wei_xin=mesre['data']['detail']['weixin'],
+                        qq=mesre['data']['detail']['qq'],
+                        longitude=mesre['data']['detail']['longitude'],
+                        latitude=mesre['data']['detail']['latitude'],
+                        timezone=mesre['data']['detail']['timeZone'],
+                        price=5,
                     )
                     createActivity.save()
 
@@ -234,7 +237,7 @@ class RecentMeetingHandler(WeChatHandler):
                 if (temp[0].my_conf.all().filter(conf_id=re['data'][index]['id'])):
                     url = 'http://m2.huiplus.com.cn/app/#/confinfo/'+str(re['data'][index]['id'])
                 else:
-                    url = AddHeader('message.html?'+str(re['data'][index]['id'])+ '@' +str(temp[0].user_id))
+                    url = AddHeader('message.html?'+str(re['data'][index]['id'])+ '@' +str(temp[0].open_id))
                 ans.append({
                     'Title': name,
                     'Url': url,
@@ -268,29 +271,30 @@ class MyMeetingHandler(WeChatHandler):
                 mesre = json.loads(messagecontent)
                 if(not(ConfBasic.objects.filter(conf_id=re['data'][index]['id']))):
                     createActivity = ConfBasic.objects.create(
-                        conf_id = mesre['data'][index]['id'],
-                        name = mesre['data'][index]['name'],
-                        start_date = mesre['data'][index]['start_date'],
-                        end_date = mesre['data'][index]['end_date'],
-                        logo = mesre['data'][index]['logo'],
-                        location = mesre['data'][index]['location'],
-                        image = mesre['data'][index]['image'],
-                        version = mesre['data'][index]['version'],
-                        private = mesre['data'][index]['private'],
-                        private_type = mesre['data'][index]['privateType'],
-                        sequence = mesre['data'][index]['sequence'],
-                        status = mesre['data'][index]['status'],
-                        desc = mesre['data'][index]['detail']['desc'],
-                        website = mesre['data'][index]['detail']['website'],
-                        phone = mesre['data'][index]['detail']['phone'],
-                        fax = mesre['data'][index]['detail']['fax'],
-                        email = mesre['data'][index]['detail']['email'],
-                        wei_bo = mesre['data'][index]['detail']['weibo'],
-                        wei_xin = mesre['data'][index]['detail']['weixin'],
-                        qq = mesre['data'][index]['detail']['qq'],
-                        longtitude = mesre['data'][index]['detail']['longtitude'],
-                        latitude = mesre['data'][index]['detail']['latitude'],
-                        timezone = mesre['data'][index]['detail']['timeZone'],
+                        conf_id=mesre['data']['basic']['id'],
+                        name=mesre['data']['basic']['name'],
+                        start_date=mesre['data']['basic']['startDate'],
+                        end_date=mesre['data']['basic']['endDate'],
+                        # logo = mesre['data']['logo'],
+                        location=mesre['data']['basic']['location'],
+                        image=mesre['data']['basic']['image'],
+                        version=mesre['data']['basic']['version'],
+                        # private = mesre['data']['basic']['isPrivate'],
+                        private_type=mesre['data']['detail']['privateType'],
+                        sequence=mesre['data']['basic']['sequence'],
+                        status=mesre['data']['basic']['status'],
+                        decs=mesre['data']['detail']['desc'],
+                        website=mesre['data']['detail']['website'],
+                        phone=mesre['data']['detail']['phone'],
+                        fax=mesre['data']['detail']['fax'],
+                        email=mesre['data']['detail']['email'],
+                        wei_bo=mesre['data']['detail']['weibo'],
+                        wei_xin=mesre['data']['detail']['weixin'],
+                        qq=mesre['data']['detail']['qq'],
+                        longitude=mesre['data']['detail']['longitude'],
+                        latitude=mesre['data']['detail']['latitude'],
+                        timezone=mesre['data']['detail']['timeZone'],
+                        price=5,
                     )
                     createActivity.save()
 
@@ -309,7 +313,7 @@ class MyMeetingHandler(WeChatHandler):
                 if (temp[0].my_conf.all().filter(conf_id=re['data'][index]['id'])):
                     url = 'http://m2.huiplus.com.cn/app/#/confinfo/'+str(re['data'][index]['id'])
                 else:
-                    url = AddHeader('message.html?'+str(re['data'][index]['id'])+ '@' +str(temp[0].user_id))
+                    url = AddHeader('message.html?'+str(re['data'][index]['id'])+ '@' +str(temp[0].open_id))
                 ans.append({
                     'Title': name,
                     'Url': url,
@@ -343,29 +347,30 @@ class ExitMeetingHandler(WeChatHandler):
                 mesre = json.loads(messagecontent)
                 if(not(ConfBasic.objects.filter(conf_id=re['data'][index]['id']))):
                     createActivity = ConfBasic.objects.create(
-                        conf_id = mesre['data'][index]['id'],
-                        name = mesre['data'][index]['name'],
-                        start_date = mesre['data'][index]['start_date'],
-                        end_date = mesre['data'][index]['end_date'],
-                        logo = mesre['data'][index]['logo'],
-                        location = mesre['data'][index]['location'],
-                        image = mesre['data'][index]['image'],
-                        version = mesre['data'][index]['version'],
-                        private = mesre['data'][index]['private'],
-                        private_type = mesre['data'][index]['privateType'],
-                        sequence = mesre['data'][index]['sequence'],
-                        status = mesre['data'][index]['status'],
-                        desc = mesre['data'][index]['detail']['desc'],
-                        website = mesre['data'][index]['detail']['website'],
-                        phone = mesre['data'][index]['detail']['phone'],
-                        fax = mesre['data'][index]['detail']['fax'],
-                        email = mesre['data'][index]['detail']['email'],
-                        wei_bo = mesre['data'][index]['detail']['weibo'],
-                        wei_xin = mesre['data'][index]['detail']['weixin'],
-                        qq = mesre['data'][index]['detail']['qq'],
-                        longtitude = mesre['data'][index]['detail']['longtitude'],
-                        latitude = mesre['data'][index]['detail']['latitude'],
-                        timezone = mesre['data'][index]['detail']['timeZone'],
+                        conf_id=mesre['data']['basic']['id'],
+                        name=mesre['data']['basic']['name'],
+                        start_date=mesre['data']['basic']['startDate'],
+                        end_date=mesre['data']['basic']['endDate'],
+                        # logo = mesre['data']['logo'],
+                        location=mesre['data']['basic']['location'],
+                        image=mesre['data']['basic']['image'],
+                        version=mesre['data']['basic']['version'],
+                        # private = mesre['data']['basic']['isPrivate'],
+                        private_type=mesre['data']['detail']['privateType'],
+                        sequence=mesre['data']['basic']['sequence'],
+                        status=mesre['data']['basic']['status'],
+                        decs=mesre['data']['detail']['desc'],
+                        website=mesre['data']['detail']['website'],
+                        phone=mesre['data']['detail']['phone'],
+                        fax=mesre['data']['detail']['fax'],
+                        email=mesre['data']['detail']['email'],
+                        wei_bo=mesre['data']['detail']['weibo'],
+                        wei_xin=mesre['data']['detail']['weixin'],
+                        qq=mesre['data']['detail']['qq'],
+                        longitude=mesre['data']['detail']['longitude'],
+                        latitude=mesre['data']['detail']['latitude'],
+                        timezone=mesre['data']['detail']['timeZone'],
+                        price=5,
                     )
                     createActivity.save()
 
@@ -381,7 +386,7 @@ class ExitMeetingHandler(WeChatHandler):
                     name = re['data'][index]['name'][:15]+"..."
                 else:
                     name = re['data'][index]['name']
-                url = AddHeader('exit.html?'+str(re['data'][index]['id'])+ '@' +str(temp[0].user_id))
+                url = AddHeader('exit.html?'+str(re['data'][index]['id'])+ '@' +str(temp[0].open_id))
                 ans.append({
                     'Title': name,
                     'Url': url,
@@ -437,29 +442,30 @@ class SearchHandler(WeChatHandler):
                 mesre = json.loads(messagecontent)
                 if(not(ConfBasic.objects.filter(conf_id=re['data'][index]['id']))):
                     createActivity = ConfBasic.objects.create(
-                        conf_id = mesre['data'][index]['id'],
-                        name = mesre['data'][index]['name'],
-                        start_date = mesre['data'][index]['start_date'],
-                        end_date = mesre['data'][index]['end_date'],
-                        logo = mesre['data'][index]['logo'],
-                        location = mesre['data'][index]['location'],
-                        image = mesre['data'][index]['image'],
-                        version = mesre['data'][index]['version'],
-                        private = mesre['data'][index]['private'],
-                        private_type = mesre['data'][index]['privateType'],
-                        sequence = mesre['data'][index]['sequence'],
-                        status = mesre['data'][index]['status'],
-                        desc = mesre['data'][index]['detail']['desc'],
-                        website = mesre['data'][index]['detail']['website'],
-                        phone = mesre['data'][index]['detail']['phone'],
-                        fax = mesre['data'][index]['detail']['fax'],
-                        email = mesre['data'][index]['detail']['email'],
-                        wei_bo = mesre['data'][index]['detail']['weibo'],
-                        wei_xin = mesre['data'][index]['detail']['weixin'],
-                        qq = mesre['data'][index]['detail']['qq'],
-                        longtitude = mesre['data'][index]['detail']['longtitude'],
-                        latitude = mesre['data'][index]['detail']['latitude'],
-                        timezone = mesre['data'][index]['detail']['timeZone'],
+                        conf_id=mesre['data']['basic']['id'],
+                        name=mesre['data']['basic']['name'],
+                        start_date=mesre['data']['basic']['startDate'],
+                        end_date=mesre['data']['basic']['endDate'],
+                        # logo = mesre['data']['logo'],
+                        location=mesre['data']['basic']['location'],
+                        image=mesre['data']['basic']['image'],
+                        version=mesre['data']['basic']['version'],
+                        # private = mesre['data']['basic']['isPrivate'],
+                        private_type=mesre['data']['detail']['privateType'],
+                        sequence=mesre['data']['basic']['sequence'],
+                        status=mesre['data']['basic']['status'],
+                        decs=mesre['data']['detail']['desc'],
+                        website=mesre['data']['detail']['website'],
+                        phone=mesre['data']['detail']['phone'],
+                        fax=mesre['data']['detail']['fax'],
+                        email=mesre['data']['detail']['email'],
+                        wei_bo=mesre['data']['detail']['weibo'],
+                        wei_xin=mesre['data']['detail']['weixin'],
+                        qq=mesre['data']['detail']['qq'],
+                        longitude=mesre['data']['detail']['longitude'],
+                        latitude=mesre['data']['detail']['latitude'],
+                        timezone=mesre['data']['detail']['timeZone'],
+                        price=5,
                     )
                     createActivity.save()
 
@@ -476,7 +482,7 @@ class SearchHandler(WeChatHandler):
                 if (temp[0].my_conf.all().filter(conf_id=re['data'][index]['id'])):
                     url = 'http://m2.huiplus.com.cn/app/#/confinfo/'+str(re['data'][index]['id'])
                 else:
-                    url = AddHeader('message.html?'+str(re['data'][index]['id']) + '@' +str(temp[0].user_id))
+                    url = AddHeader('message.html?'+str(re['data'][index]['id']) + '@' +str(temp[0].open_id))
                 ans.append({
                     'Title': name,
                     'Url': url,
@@ -486,17 +492,6 @@ class SearchHandler(WeChatHandler):
         else:
             return self.reply_text("您还没进行过绑定")
 
-class MeetingMessageHandler(WeChatHandler):
-    def check(self):
-        return self.is_event_click(self.view.event_keys['search'])
-
-    def handle(self):
-        openid = self.input['FromUserName']
-        temp = UserLogin.objects.filter(open_id=openid)
-        if temp:
-            return self.reply_text('请输入关键词查询' + '\n' + '格式为：查询 关键词' + '\n' + '例：查询 教育资源')
-        else:
-            return self.reply_text("您还没进行过绑定")
 
 
 class Quicklook(WeChatHandler):
@@ -523,29 +518,30 @@ class Quicklook(WeChatHandler):
                 mesre = json.loads(messagecontent)
                 if(not(ConfBasic.objects.filter(conf_id=re['data'][index]['id']))):
                     createActivity = ConfBasic.objects.create(
-                        conf_id = mesre['data'][index]['id'],
-                        name = mesre['data'][index]['name'],
-                        start_date = mesre['data'][index]['start_date'],
-                        end_date = mesre['data'][index]['end_date'],
-                        logo = mesre['data'][index]['logo'],
-                        location = mesre['data'][index]['location'],
-                        image = mesre['data'][index]['image'],
-                        version = mesre['data'][index]['version'],
-                        private = mesre['data'][index]['private'],
-                        private_type = mesre['data'][index]['privateType'],
-                        sequence = mesre['data'][index]['sequence'],
-                        status = mesre['data'][index]['status'],
-                        desc = mesre['data'][index]['detail']['desc'],
-                        website = mesre['data'][index]['detail']['website'],
-                        phone = mesre['data'][index]['detail']['phone'],
-                        fax = mesre['data'][index]['detail']['fax'],
-                        email = mesre['data'][index]['detail']['email'],
-                        wei_bo = mesre['data'][index]['detail']['weibo'],
-                        wei_xin = mesre['data'][index]['detail']['weixin'],
-                        qq = mesre['data'][index]['detail']['qq'],
-                        longtitude = mesre['data'][index]['detail']['longtitude'],
-                        latitude = mesre['data'][index]['detail']['latitude'],
-                        timezone = mesre['data'][index]['detail']['timeZone'],
+                        conf_id=mesre['data']['basic']['id'],
+                        name=mesre['data']['basic']['name'],
+                        start_date=mesre['data']['basic']['startDate'],
+                        end_date=mesre['data']['basic']['endDate'],
+                        # logo = mesre['data']['logo'],
+                        location=mesre['data']['basic']['location'],
+                        image=mesre['data']['basic']['image'],
+                        version=mesre['data']['basic']['version'],
+                        # private = mesre['data']['basic']['isPrivate'],
+                        private_type=mesre['data']['detail']['privateType'],
+                        sequence=mesre['data']['basic']['sequence'],
+                        status=mesre['data']['basic']['status'],
+                        decs=mesre['data']['detail']['desc'],
+                        website=mesre['data']['detail']['website'],
+                        phone=mesre['data']['detail']['phone'],
+                        fax=mesre['data']['detail']['fax'],
+                        email=mesre['data']['detail']['email'],
+                        wei_bo=mesre['data']['detail']['weibo'],
+                        wei_xin=mesre['data']['detail']['weixin'],
+                        qq=mesre['data']['detail']['qq'],
+                        longitude=mesre['data']['detail']['longitude'],
+                        latitude=mesre['data']['detail']['latitude'],
+                        timezone=mesre['data']['detail']['timeZone'],
+                        price=5,
                     )
                     createActivity.save()
 

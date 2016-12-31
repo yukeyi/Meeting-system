@@ -1,0 +1,39 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="AdminLogin.css">
+		<script type="text/javascript">
+			function func()
+			{
+				if(document.getElementById("name").value == "root" && document.getElementById("pass").value == "123")
+				{
+					window.location.href="home.html";
+				}
+				else
+				{
+					alert("用户名或密码不正确");
+				}
+			}
+		</script>
+	</head>
+	<body>
+		<div id = "title">
+			<h1 id = "head">觅听--后台登陆</h1>
+		</div>
+		<br/><br/><br/>
+		<div id = "container">
+			<div class = "login">
+				<br/><br/>
+				<div id = "header">登陆</div>
+				<br/><br/>
+				<div id = "u_name">账号:</div>
+				<input type="text" id = "name"></input>
+				<br/><br/><br/>
+				<div id = "u_pass">密码:</div>
+				<input type="password" id = "pass"></input>
+				<br/><br/><br/>
+				<div onclick="func()" id = "btn">login</div>
+				<br/><br/><br/>
+			</div>
+		</div>
+	</body>
+</html>

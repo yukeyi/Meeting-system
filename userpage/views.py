@@ -5,6 +5,7 @@ from wechat.models import User
 import urllib.request
 import urllib.parse
 import json
+import requests
 from django.http import HttpResponse
 
 class UserBind(APIView):
@@ -41,8 +42,6 @@ class UserBind(APIView):
 
 
 
-
-
 class Postmessage(APIView):
     def get(self):
         self.check_input('id')
@@ -71,16 +70,18 @@ class Postmessage(APIView):
             'longtitude': meet.longitude,
             'latitude': meet.latitude,
             'timezone': meet.timezone,
+            'price': meet.price,
         }
         print (result)
         return result
 
 class postJoinConf(APIView):
     def get(self):
-        self.check_input('confid','userid')
+        self.check_input('confid','openid')
         data = {}
+        temp = UserLogin.objects.filter(open_id=self.input['openid'])
         data['confid'] = self.input['confid']
-        data['userid'] = self.input['userid']
+        data['userid'] = temp[0].user_id
         data['type'] = 0
         hj_url = 'http://60.205.137.139/adminweb/REST/API-V2/joinConf'
         hj_post = urllib.parse.urlencode(data).encode(encoding='utf-8')
@@ -89,10 +90,6 @@ class postJoinConf(APIView):
         hj_content = hj_response.read().decode('utf-8')
         hj_info = json.loads(hj_content)
 
-        temp = UserLogin.objects.filter(user_id=self.input['userid'])
-        #print(temp)
-        #print("dddd")
-        #print(ConfBasic.objects)
         conf = ConfBasic.objects.get(conf_id=self.input['confid'])
         temp[0].my_conf.add(conf)
         temp[0].save()
@@ -100,10 +97,11 @@ class postJoinConf(APIView):
 
 class postExitConf(APIView):
     def get(self):
-        self.check_input('confid','userid')
+        self.check_input('confid','openid')
+        temp = UserLogin.objects.filter(open_id=self.input['openid'])
         data = {}
         data['confid'] = self.input['confid']
-        data['userid'] = self.input['userid']
+        data['userid'] = temp[0].user_id
         hj_url = 'http://60.205.137.139/adminweb/REST/API-V2/cancelConf'
         hj_post = urllib.parse.urlencode(data).encode(encoding='utf-8')
         hj_req = urllib.request.Request(hj_url)
@@ -111,10 +109,6 @@ class postExitConf(APIView):
         hj_content = hj_response.read().decode('utf-8')
         hj_info = json.loads(hj_content)
 
-        temp = UserLogin.objects.filter(user_id=self.input['userid'])
-        #print(temp)
-        #print("dddd")
-        #print(ConfBasic.objects)
         conf = ConfBasic.objects.get(conf_id=self.input['confid'])
         temp[0].my_conf.remove(conf)
         temp[0].save()
@@ -124,7 +118,39 @@ class Posthome(APIView):
     def get(self):
         self.check_input('id')
         print(self.input['id'])
+        get_access_token_url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx9614f8da14f53590&secret=af4514adb134dd475588cd93c45ba790"
+        r = requests.get(get_access_token_url)
+        access_token = r.json()['access_token']
+        print(access_token)
+        sendUrl = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" + access_token
+        template_id = "nQRL9MRd-_ldZd9xV8hP8O-BFhkybSYL63vV8VzcZqg"
+        for user in UserLogin.objects.all():
+            if user.my_conf.all().filter(conf_id=self.input['id']):
+                meetname = ConfBasic.objects.get(conf_id=self.input['id']).name
+                message = '{"touser":"%(open_id)s","template_id":"%(template_id)s","url":"%(url)s","data":{"name":{"value":"%(conf_name)s"}}}' % {"open_id":user.open_id,"template_id":template_id,"url":"http://m2.huiplus.com.cn/app/#/confinfo/"+str(self.input['id']),"conf_name":meetname}
+                message = message.encode('utf-8')
+                reply = requests.post(sendUrl, data=message).json()
+                print(user.user_id)
+                print(reply)
         result = []
+        return result
+
+class Postmoney(APIView):
+    def get(self):
+        self.check_input('id','money')
+        print(self.input['id'])
+        conf = ConfBasic.objects.get(conf_id=self.input['id'])
+        conf.price = self.input['money']
+        conf.save()
+        result = []
+        return result
+
+class Meetlist(APIView):
+    def get(self):
+        result = []
+        conf = ConfBasic.objects.all()
+        for i in conf:
+            result.append((i.name,i.conf_id,i.price))
         return result
 
 

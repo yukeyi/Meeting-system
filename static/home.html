@@ -1,36 +1,97 @@
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="message.css">
+    <link rel="stylesheet" type="text/css" href="home.css">
     <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css"></link>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script type="text/javascript">
-function UrlSearch()
+function UrlSearch(btnid,money = -1)
+{
+	if(money == -1)
+	{
+		$.ajax({
+			type: "get",
+			dataType: "json",
+			data:{id:btnid},
+			url: ("http://183.172.97.125/api/u/home"),
+			success: function (msg) {
+				console.log(msg);
+				alert("模板消息已发送");
+			}
+		});
+	}
+	else
+	{
+		$.ajax({
+			type: "get",
+			dataType: "json",
+			data:{id:btnid,money:document.getElementById("money"+btnid.toString()).value},
+			url: ("http://183.172.97.125/api/u/money"),
+			success: function (msg) {
+				console.log(msg);
+				alert("已成功修改会议价格");
+				//console.log(document.getElementById("money"+btnid.toString().value));
+			}
+		});	
+	}
+}
+function Getlist()
 {
 
             $.ajax({
                 type: "get",
                 dataType: "json",
-                data:{id:1},
-                url: ("http://183.172.98.130/api/u/home"),
+                data:{},
+                url: ("http://183.172.97.125/api/u/meetlist"),
                 success: function (msg) {
                     console.log(msg);
-					console.log(document.getElementById("firstname").value)
+					for (var i=0;i<msg['data'].length;i++)
+					{
+						var meet = document.getElementById("meet");
+						var onemeet = document.createElement('div');
+						onemeet.setAttribute('class','block');
+						meet.appendChild(onemeet);
+						var meetname = document.createElement('div');
+						meetname.innerHTML = msg['data'][i][0];
+						meetname.setAttribute('id','name'+msg['data'][i][1].toString());
+						meetname.setAttribute('class','name');
+						onemeet.appendChild(meetname);
+						var meetsend = document.createElement('div');
+						meetsend.setAttribute('id','send'+msg['data'][i][1].toString());
+						meetsend.setAttribute('onclick',("UrlSearch("+msg['data'][i][1].toString()+")"));
+						meetsend.setAttribute('class','send')
+						meetsend.innerHTML = "推送";
+						onemeet.appendChild(meetsend);
+						var meetmoney = document.createElement('input');
+						meetmoney.setAttribute('id','money'+msg['data'][i][1].toString());
+						meetmoney.setAttribute('value',msg['data'][i][2].toString());
+						meetmoney.setAttribute('class','moneyinput')
+						onemeet.appendChild(meetmoney);
+						var meettemp = document.createElement('div');
+						meettemp.setAttribute('class',"temp");
+						meettemp.innerHTML = "元";
+						onemeet.appendChild(meettemp);
+						var meetchangemoney = document.createElement('div');
+						meetchangemoney.setAttribute('id','moneysend'+msg['data'][i][1].toString());
+						meetchangemoney.setAttribute('onclick',("UrlSearch("+msg['data'][i][1].toString()+","+"1"+")"));
+						meetchangemoney.setAttribute('class','sendmoney')
+						meetchangemoney.innerHTML = "修改票价";
+						onemeet.appendChild(meetchangemoney);
+					}
                 }
             });
 }
-//var Request=new UrlSearch(); //实例化
+var Request=new Getlist(); //实例化
 //alert(Request.id);
 </script>
 </head>
 <body>
-	<div>fuck your mother</div>
-	First name:<br>
-	<input type="text" id="firstname" value="Mickey">
-	<br>
-	Last name:<br>
-	<input type="text" id="lastname" value="Mouse">
-	<br><br>
-	<input type="submit" value="Submit" onclick="UrlSearch()">
+	<div id = "title">
+		<h1 id = "head">觅听后台管理</h1>
+	</div>
+	<br/><br/><br/>
+	<div id = "header">所有会议列表</div>
+	<hr style="filter: alpha(opacity=100,finishopacity=0,style=2)" width="80%" color=#987cb9 size=10 />
+	<div id = "meet"></div>
 </body>
 </html>

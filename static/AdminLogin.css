@@ -1,0 +1,63 @@
+#head{
+	margin: 0 auto;
+	width:22%;
+	font-family:"微软雅黑";
+	color:white;
+	line-height:80px;
+}
+
+#title{
+	width: 80%;
+	margin:0 auto;
+	margin-top:20px;
+	border-radius: 10px;
+	height:80px;
+	background-color:#2196F3;
+}
+
+#btn{
+	background-color:#2196F3;
+	width: 30%;
+	text-align:center;
+	color:white;
+	border-radius: 5px;
+	height:35px;
+	line-height:35px;
+	margin:0 auto;
+	cursor:pointer;
+}
+
+#header{
+	text-align:center;
+	font-family:"华文新魏";
+	font-size:30px;
+}
+
+#u_name{
+	float:left;
+}
+
+#u_pass{
+	float:left;
+}
+
+#name{
+	margin-left:8px;
+}
+
+#pass{
+	margin-left:8px;
+}
+
+.login{
+	width:60%;
+	margin:0 auto;
+	font-family:"微软雅黑";
+}
+
+#container{
+	width:30%;
+	margin:0 auto;
+	border:5px solid #2196F3;
+	border-radius: 10px;
+}

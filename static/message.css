@@ -87,6 +87,12 @@ body{
 	font-size: 1.5vh;
 }
 #chargebutton{
-	margin-left:45%;
+	margin-left:40%;
 	color:#448AFF;
+}
+#chargebuttonclick{
+	margin-top: 3%;
+	width: 200px;
+	height: 80px;
+	font-size: 40px;
 }

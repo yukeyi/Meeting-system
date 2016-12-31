@@ -1,0 +1,84 @@
+#meet{
+	
+}
+
+#head{
+	margin: 0 auto;
+	width:22%;
+	font-family:"微软雅黑";
+	color:white;
+	line-height:80px;
+}
+
+#title{
+	width: 80%;
+	margin:0 auto;
+	margin-top:20px;
+	border-radius: 10px;
+	height:80px;
+	background-color:#2196F3;
+}
+
+#header{
+	text-align:center;
+	font-family:"微软雅黑";
+	font-size:30px;
+}
+
+.block{
+	width: 80%;
+	margin:0 auto;
+	height: 15vh;
+	border:2px solid #2196F3;
+}
+
+.send{
+	float:left;
+	width:5%;
+	height:20px;
+	margin-top:5vh;
+	cursor:pointer;
+	line-height:20px;
+	background-color:#2196F3;
+	color:white;
+	text-align:center;
+	font-family:"微软雅黑";
+	border-radius:5px;
+}
+
+.name{
+	width:60%;
+	margin-top:5vh;
+	margin-left:15px;
+	float:left;
+	font-size:16px;
+	font-family:"微软雅黑";
+}
+
+.sendmoney{
+	float:left;
+	width:10%;
+	height:20px;
+	margin-top:5vh;
+	cursor:pointer;
+	line-height:20px;
+	background-color:#2196F3;
+	color:white;
+	text-align:center;
+	font-family:"微软雅黑";
+	border-radius:5px;
+	margin-left:20px;
+}
+
+.temp{
+	margin-left:5px;
+	font-size:16px;
+	float:left;
+	margin-top:5vh;
+}
+
+.moneyinput{
+	float:left;
+	margin-top:5vh;
+	margin-left:20px;
+}

@@ -21,10 +21,16 @@
   font-weight: bold;
 }
 .img{
-	margin-top:2%;
+	margin-top: 2%;
 	text-align:center;
 }
 #exit{
-	margin-left:46%;
+	margin-left:40%;
 	color:#448AFF;
+}
+#exitclick{
+	margin-top: 3%;
+	width: 200px;
+	height: 80px;
+	font-size: 40px;
 }
