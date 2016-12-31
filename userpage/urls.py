@@ -5,7 +5,7 @@ from django.conf.urls import url
 from userpage.views import *
 
 
-__author__ = "Epsirom"
+__author__ = "miting"
 
 
 urlpatterns = [

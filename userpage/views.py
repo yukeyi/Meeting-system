@@ -63,7 +63,6 @@ class Postmessage(APIView):
             'phone': meet.phone,
             'fax': meet.fax,
             'email': meet.email,
-        #    'address': ,
             'weibo': meet.wei_bo,
             'weixin': meet.wei_xin,
             'qq': meet.qq,
@@ -89,7 +88,6 @@ class postJoinConf(APIView):
         hj_response = urllib.request.urlopen(hj_req, hj_post)
         hj_content = hj_response.read().decode('utf-8')
         hj_info = json.loads(hj_content)
-
         conf = ConfBasic.objects.get(conf_id=self.input['confid'])
         temp[0].my_conf.add(conf)
         temp[0].save()

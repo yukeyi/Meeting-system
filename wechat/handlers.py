@@ -6,7 +6,7 @@ import urllib.request
 import urllib.parse
 import json
 
-__author__ = "Epsirom"
+__author__ = "miting"
 
 def AddHeader(path):
     return ("http://183.172.97.125/"+ path)
@@ -51,7 +51,6 @@ class BindAccountHandler(WeChatHandler):
         user_response = urllib.request.urlopen(user_req)
         user_content = user_response.read().decode('utf-8')
         user_info = json.loads(user_content)
-        #print(user_info)
         temp = UserLogin.objects.filter(open_id=openid)
 
         if temp:
@@ -71,7 +70,6 @@ class BindAccountHandler(WeChatHandler):
             hj_response = urllib.request.urlopen(hj_req, hj_post)
             hj_content = hj_response.read().decode('utf-8')
             hj_user_info = json.loads(hj_content)
-            #print(type(hj_user_info['data']['password']))
             createUser = UserLogin.objects.create(user_id=hj_user_info['data']['id'],
                                                   open_id=user_info['openid'],
                                                   email=hj_user_info['data']['email'])
@@ -109,11 +107,9 @@ class AllMeetingsHandler(WeChatHandler):
                         name = mesre['data']['basic']['name'],
                         start_date = mesre['data']['basic']['startDate'],
                         end_date = mesre['data']['basic']['endDate'],
-                        #logo = mesre['data']['logo'],
                         location = mesre['data']['basic']['location'],
                         image = mesre['data']['basic']['image'],
                         version = mesre['data']['basic']['version'],
-                        #private = mesre['data']['basic']['isPrivate'],
                         private_type = mesre['data']['detail']['privateType'],
                         sequence = mesre['data']['basic']['sequence'],
                         status = mesre['data']['basic']['status'],
@@ -200,11 +196,9 @@ class RecentMeetingHandler(WeChatHandler):
                         name=mesre['data']['basic']['name'],
                         start_date=mesre['data']['basic']['startDate'],
                         end_date=mesre['data']['basic']['endDate'],
-                        # logo = mesre['data']['logo'],
                         location=mesre['data']['basic']['location'],
                         image=mesre['data']['basic']['image'],
                         version=mesre['data']['basic']['version'],
-                        # private = mesre['data']['basic']['isPrivate'],
                         private_type=mesre['data']['detail']['privateType'],
                         sequence=mesre['data']['basic']['sequence'],
                         status=mesre['data']['basic']['status'],
@@ -256,7 +250,7 @@ class MyMeetingHandler(WeChatHandler):
         openid = self.input['FromUserName']
         temp = UserLogin.objects.filter(open_id=openid)
         if temp:
-            url = 'http://60.205.137.139/adminweb/REST/API-V2/favoriteConfList?userid='+str(temp[0].user_id)+'&page='+str(1)+'&page_size='+str(3)
+            url = 'http://60.205.137.139/adminweb/REST/API-V2/favoriteConfList?userid='+str(temp[0].user_id)+'&page='+str(1)+'&page_size='+str(10)
             req = urllib.request.Request(url)
             response = urllib.request.urlopen(req)
             content = response.read().decode('utf-8')
@@ -275,11 +269,9 @@ class MyMeetingHandler(WeChatHandler):
                         name=mesre['data']['basic']['name'],
                         start_date=mesre['data']['basic']['startDate'],
                         end_date=mesre['data']['basic']['endDate'],
-                        # logo = mesre['data']['logo'],
                         location=mesre['data']['basic']['location'],
                         image=mesre['data']['basic']['image'],
                         version=mesre['data']['basic']['version'],
-                        # private = mesre['data']['basic']['isPrivate'],
                         private_type=mesre['data']['detail']['privateType'],
                         sequence=mesre['data']['basic']['sequence'],
                         status=mesre['data']['basic']['status'],
@@ -351,11 +343,9 @@ class ExitMeetingHandler(WeChatHandler):
                         name=mesre['data']['basic']['name'],
                         start_date=mesre['data']['basic']['startDate'],
                         end_date=mesre['data']['basic']['endDate'],
-                        # logo = mesre['data']['logo'],
                         location=mesre['data']['basic']['location'],
                         image=mesre['data']['basic']['image'],
                         version=mesre['data']['basic']['version'],
-                        # private = mesre['data']['basic']['isPrivate'],
                         private_type=mesre['data']['detail']['privateType'],
                         sequence=mesre['data']['basic']['sequence'],
                         status=mesre['data']['basic']['status'],
@@ -373,9 +363,6 @@ class ExitMeetingHandler(WeChatHandler):
                         price=5,
                     )
                     createActivity.save()
-
-
-
 
             if len(re['data']) == 0:
                 return self.reply_text("您还没有加入任何会议")
@@ -432,7 +419,6 @@ class SearchHandler(WeChatHandler):
             re = json.loads(content)
 
 
-
             #用会议详情接口存信息
             for index in range(0, len(re['data'])):
                 messageurl = 'http://60.205.137.139/adminweb/REST/API-V2/confInfo?confid=' + str(re['data'][index]['id'])
@@ -446,11 +432,9 @@ class SearchHandler(WeChatHandler):
                         name=mesre['data']['basic']['name'],
                         start_date=mesre['data']['basic']['startDate'],
                         end_date=mesre['data']['basic']['endDate'],
-                        # logo = mesre['data']['logo'],
                         location=mesre['data']['basic']['location'],
                         image=mesre['data']['basic']['image'],
                         version=mesre['data']['basic']['version'],
-                        # private = mesre['data']['basic']['isPrivate'],
                         private_type=mesre['data']['detail']['privateType'],
                         sequence=mesre['data']['basic']['sequence'],
                         status=mesre['data']['basic']['status'],
@@ -503,7 +487,7 @@ class Quicklook(WeChatHandler):
         openid = self.input['FromUserName']
         temp = UserLogin.objects.filter(open_id=openid)
         if temp:
-            url = 'http://60.205.137.139/adminweb/REST/API-V2/favoriteConfList?userid='+str(temp[0].user_id)+'&page='+str(1)+'&page_size='+str(3)
+            url = 'http://60.205.137.139/adminweb/REST/API-V2/favoriteConfList?userid='+str(temp[0].user_id)+'&page='+str(1)+'&page_size='+str(10)
             req = urllib.request.Request(url)
             response = urllib.request.urlopen(req)
             content = response.read().decode('utf-8')
@@ -522,11 +506,9 @@ class Quicklook(WeChatHandler):
                         name=mesre['data']['basic']['name'],
                         start_date=mesre['data']['basic']['startDate'],
                         end_date=mesre['data']['basic']['endDate'],
-                        # logo = mesre['data']['logo'],
                         location=mesre['data']['basic']['location'],
                         image=mesre['data']['basic']['image'],
                         version=mesre['data']['basic']['version'],
-                        # private = mesre['data']['basic']['isPrivate'],
                         private_type=mesre['data']['detail']['privateType'],
                         sequence=mesre['data']['basic']['sequence'],
                         status=mesre['data']['basic']['status'],
@@ -544,9 +526,6 @@ class Quicklook(WeChatHandler):
                         price=5,
                     )
                     createActivity.save()
-
-
-
 
             if len(re['data']) == 0:
                 return self.reply_text("您没有关注或收藏的会议")
