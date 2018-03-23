@@ -1,2 +1,2 @@
-# WeChatTicket
-Ticket management system based on WeChat public platform.
+# Meeting system
+Meeting management system based on WeChat public platform.
